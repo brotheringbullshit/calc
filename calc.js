@@ -43,7 +43,7 @@ function processFile(data) {
     // Handle start and end blocks
     if (line.startsWith('start')) {
       if (hasStart) {
-        console.error('Error: WHY ANOTHER START BLOCK?');
+        console.error('ERR: WHY ANOTHER START BLOCK?');
         process.exit(1);
       }
       inStartBlock = true;
@@ -53,7 +53,7 @@ function processFile(data) {
 
     if (line.startsWith('end')) {
       if (!hasStart) {
-        console.error('Error: END BLOCK BEFORE START BLOCK!?');
+        console.error('ERR: END BLOCK BEFORE START BLOCK!?');
         process.exit(1);
       }
       hasEnd = true;
@@ -72,12 +72,12 @@ function processFile(data) {
   }
 
   if (!hasStart) {
-    console.error('Error: WHEN IS IT GOING TO START?');
+    console.error('ERR: WHEN IS IT GOING TO START?');
     process.exit(1);
   }
 
   if (!hasEnd) {
-    console.error('Error: NEVER-ENDING PAIN.');
+    console.error('WARN: NEVER-ENDING PAIN. (NO END BLOCK)');
     process.exit(1);
   }
 }
@@ -86,7 +86,7 @@ function processLine(line) {
   if (line.startsWith('print')) {
     const expression = line.slice(5).trim(); // Extract the expression after 'print'
     if (!expression) {
-      throw new Error('Error: THERE IS NO EXPRESSION PROVIDED AFTER PRINTING SOMETHING.');
+      throw new Error('ERR: THERE IS NO EXPRESSION PROVIDED AFTER PRINTING SOMETHING.');
     }
 
     const result = evaluateExpression(expression);
@@ -104,10 +104,10 @@ function evaluateExpression(expression) {
     // Ensure it only allows valid mathematical expressions
     const result = eval(expression);
     if (result === Infinity || result === -Infinity || isNaN(result)) {
-      throw new Error('Error: INVAILD MAFF OPERATION (e.g., division by zero).');
+      throw new Error('ERR: INVAILD MAFF OPERATION (e.g., division by zero).');
     }
     return result;
   } catch (error) {
-    throw new Error(`Error: BAD EXPRESSION: ${expression}`);
+    throw new Error(`ERR: BAD EXPRESSION: ${expression}`);
   }
 }
